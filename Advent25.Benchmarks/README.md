@@ -22,8 +22,21 @@ StdDev    : Standard deviation of all measurements
 Ratio     : Mean of the ratio distribution ([Current]/[Baseline])
 Allocated : Allocated memory per single operation (managed only, inclusive, 1KB = 1024B)
 1 ns      : 1 Nanosecond (0.000000001 sec)
+1 μs      : 1 Microsecond (0.000001 sec)
 ```
 
 ## Results
 
-(Coming Soon)
+All Benchmarks are run as:
+
+BenchmarkDotNet v0.15.8, macOS Tahoe 26.0.1 (25A362) [Darwin 25.0.0]
+Apple M3, 1 CPU, 8 logical and 8 physical cores
+.NET SDK 10.0.100
+[Host]     : .NET 10.0.0 (10.0.0, 10.0.25.52411), Arm64 RyuJIT armv8.0-a
+DefaultJob : .NET 10.0.0 (10.0.0, 10.0.25.52411), Arm64 RyuJIT armv8.0-a
+
+### Day 1
+
+| Method |     Mean |    Error |   StdDev | Ratio | Allocated |
+|--------|---------:|---------:|---------:|------:|----------:|
+| Auros  | 38.13 μs | 0.761 μs | 0.712 μs |  1.00 |         - |

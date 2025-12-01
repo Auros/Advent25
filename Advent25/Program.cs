@@ -5,4 +5,5 @@ var solution = SolutionFinder.ForDay<Program>("Advent25", day);
 
 SolutionRunner runner = new(day);
 var result = await runner.RunAsync(solution);
-Console.WriteLine(result);
+Console.WriteLine("Part 1: " + result.Item1);
+Console.WriteLine("Part 2: " + result.Item2);
