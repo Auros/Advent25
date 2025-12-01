@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Advent25.Benchmarks/Advent25.Benchmarks.csproj" />
+  <Project Path="Advent25/Advent25.csproj" />
+</Solution>
