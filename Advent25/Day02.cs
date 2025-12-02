@@ -9,7 +9,13 @@ public class Day02 : IAdventSolution
     public static (long, long) Run(AdventInput input)
     {
         long part1 = 0;
+        long part2 = 0;
         
+        Span<int> factors = stackalloc int[3];
+        Span<char> buffer = stackalloc char[64];
+        Span<long> records = stackalloc long[256];
+        int header = 0;
+
         var inputSpan = input.Text.AsSpan();
         var idPairs = inputSpan.Split(',');
         foreach (Range idPairRange in idPairs)
@@ -25,35 +31,54 @@ public class Day02 : IAdventSolution
             idSet.MoveNext();
             var lastIdSpan = idSpan[idSet.Current];
             
-            // Part 1: If both ids are the same length and odd, it's impossible for an invalid id to appear
-            if (firstIdSpan.Length == lastIdSpan.Length && firstIdSpan.Length % 2 != 0)
-                continue;
-            
             var firstId = long.Parse(firstIdSpan, NumberStyles.None);
             var lastId = long.Parse(lastIdSpan, NumberStyles.None);
 
             var firstDigitCount = GetDigitCount(firstId);
             var lastDigitCount = GetDigitCount(lastId);
 
-            // this seems dubious, I need to double-check this logic
-            var min = (int)(firstId / GetHalvingPowerForDigits(firstDigitCount % 2 == 0 ? firstDigitCount : firstDigitCount + 1));
-            var max = (int)(lastId / GetHalvingPowerForDigits(lastDigitCount % 2 == 0 ? lastDigitCount : lastDigitCount - 1));
-            
-            for (int i = min; i <= max; i++)
+            for (int digitCount = firstDigitCount; digitCount <= lastDigitCount; digitCount++)
             {
-                var digitCount = GetDigitCount(i);
-                var invalid = DoubleValueVisually(i, digitCount);
+                var factorCount = GetFactorsLimited(digitCount, ref factors);
+                for (int f = 0; f < factorCount; f++)
+                {
+                    var factor = factors[f];
 
-                var tooSmall = invalid < firstId;
-                var tooLarge = invalid > lastId;
-                if (!tooSmall && !tooLarge) // If it's in range we add it to the sum
-                    part1 += invalid;
-                else if (tooLarge) // If it's too large, we end early
-                    break;
+                    // Huge option to prune here to get speed down, if I am challenged to do so.
+                    var minBound = GetPowerForDigits(factor - 1);
+                    var maxBound = GetPowerForDigits(factor);
+
+                    // a whole mess
+                    for (int i = minBound; i < maxBound; i++)
+                    {
+                        _ = i.TryFormat(buffer, out int writtenCount);
+                        for (int b = writtenCount; b < digitCount; b++)
+                        {
+                            buffer[b] = buffer[b % writtenCount];
+                        }
+                        var target = buffer[..digitCount];
+                        var invalid = long.Parse(target, NumberStyles.None);
+
+                        if (invalid < firstId || invalid > lastId)
+                            continue;
+                        
+                        if (!records[..header].Contains(invalid))
+                        {
+                            part2 += invalid;
+                            records[header++] = invalid;
+                        }
+                            
+                        if (digitCount / writtenCount == 2)
+                            part1 += invalid;
+                    }
+                }
+
+                header = 0;
+                records.Clear();
             }
         }
 
-        return (part1, 0);
+        return (part1, part2);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -79,20 +104,6 @@ public class Day02 : IAdventSolution
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int GetHalvingPowerForDigits(long digits)
-    {
-        return digits switch
-        {
-            2 => 10,
-            4 => 100,
-            6 => 1000,
-            8 => 10000,
-            10 => 100000,
-            _ => 0
-        };
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static int GetPowerForDigits(int digits)
     {
         return digits switch
@@ -110,36 +121,46 @@ public class Day02 : IAdventSolution
         };
     }
 
-    /*[MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int GetPossibleInvalidDigits(int number, ref Span<int> invalidDigits)
-    {
-        int num = 0;
-        int count = 0;
-        var digits = GetDigitCount(number);
-        
-        if (digits == 1)
-        {
-            invalidDigits[count++] = 11 * number;
-        }
-        else if (digits == 2)
-        {
-            invalidDigits[count++] = 101 * number;
-        }
-        else if (digits == 3)
-        {
-            invalidDigits[count++] = 10010 * number;
-        }
-        else if (digits == 4)
-        {
-            invalidDigits[count++] = 10010 * number;
-        }
-        
-        return count;
-    }*/
-
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private static int DoubleValueVisually(int input, int digits)
+    private static int GetFactorsLimited(int number, ref Span<int> factors)
     {
-        return input + input * GetPowerForDigits(digits);
+        int count = 0;
+        switch (number)
+        {
+            case 2 or 3 or 5 or 7 or 11 or 13:
+                factors[count++] = 1;
+                break;
+            case 4:
+                factors[count++] = 2;
+                factors[count++] = 1;
+                break;
+            case 6:
+                factors[count++] = 3;
+                factors[count++] = 2;
+                factors[count++] = 1;
+                break;
+            case 8:
+                factors[count++] = 4;
+                factors[count++] = 2;
+                factors[count++] = 1;
+                break;
+            case 9:
+                factors[count++] = 3;
+                factors[count++] = 1;
+                break;
+            case 10:
+                factors[count++] = 5;
+                factors[count++] = 2;
+                factors[count++] = 1;
+                break;
+            case 12:
+                factors[count++] = 6;
+                factors[count++] = 3;
+                factors[count++] = 2;
+                factors[count++] = 1;
+                break;
+        }
+
+        return count;
     }
 }

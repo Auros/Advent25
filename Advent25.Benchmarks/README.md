@@ -23,6 +23,7 @@ Ratio     : Mean of the ratio distribution ([Current]/[Baseline])
 Allocated : Allocated memory per single operation (managed only, inclusive, 1KB = 1024B)
 1 ns      : 1 Nanosecond  (0.000000001 sec)
 1 μs      : 1 Microsecond (0.000001 sec)
+1 ms      : 1 Millisecond (0.001 sec)
 ```
 
 ## Results
@@ -40,3 +41,9 @@ DefaultJob : .NET 10.0.0 (10.0.0, 10.0.25.52411), Arm64 RyuJIT armv8.0-a
 | Method |     Mean |    Error |   StdDev | Ratio | Allocated |
 |--------|---------:|---------:|---------:|------:|----------:|
 | Auros  | 38.13 μs | 0.761 μs | 0.712 μs |  1.00 |         - |
+
+### Day 2
+
+| Method |     Mean |     Error |    StdDev | Ratio | Allocated |
+|--------|---------:|----------:|----------:|------:|----------:|
+| Auros  | 2.817 ms | 0.0023 ms | 0.0020 ms |  1.00 |         - |
