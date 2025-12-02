@@ -4,7 +4,7 @@ namespace Advent25;
 
 public class Day01 : IAdventSolution
 {
-    public static (int, int) Run(AdventInput input)
+    public static (long, long) Run(AdventInput input)
     {
         int dial = 50;
         int part1Count = 0;

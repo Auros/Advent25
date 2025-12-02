@@ -4,13 +4,13 @@ namespace Advent25.Core;
 
 public class SolutionRunner(int day)
 {
-    public async Task<(int, int)> RunAsync<T>() where T : IAdventSolution
+    public async Task<(long, long)> RunAsync<T>() where T : IAdventSolution
     {
         using var input = await LoadInputAsync();
         return T.Run(input);
     }
 
-    public async Task<(int, int)> RunAsync(Type type)
+    public async Task<(long, long)> RunAsync(Type type)
     {
         if (!type.IsAssignableTo(typeof(IAdventSolution)))
         {
@@ -18,7 +18,7 @@ public class SolutionRunner(int day)
         }
         using var input = await LoadInputAsync();
         var runMethod = type.GetMethod("Run", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
-        return ((int, int))runMethod!.Invoke(null, [input])!;
+        return ((long, long))runMethod!.Invoke(null, [input])!;
     }
 
     public async Task<AdventInput> LoadInputAsync()

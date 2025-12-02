@@ -16,7 +16,7 @@ public class Day01
     }
     
     [Benchmark(Baseline = true)]
-    public (int, int) Auros()
+    public (long, long) Auros()
     {
         return Advent25.Day01.Run(AdventBenchmarks.Input);
     }

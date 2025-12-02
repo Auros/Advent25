@@ -2,5 +2,5 @@ namespace Advent25.Core;
 
 public interface IAdventSolution
 {
-    static abstract (int, int) Run(AdventInput input);
+    static abstract (long, long) Run(AdventInput input);
 }
