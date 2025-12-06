@@ -59,3 +59,15 @@ DefaultJob : .NET 10.0.0 (10.0.0, 10.0.25.52411), Arm64 RyuJIT armv8.0-a
 | Method |     Mean |     Error |    StdDev | Ratio | Allocated |
 |--------|---------:|----------:|----------:|------:|----------:|
 | Auros  | 1.866 ms | 0.0132 ms | 0.0124 ms |  1.00 |         - |
+
+### Day 5
+
+| Method |     Mean |    Error |   StdDev | Ratio | Allocated |
+|--------|---------:|---------:|---------:|------:|----------:|
+| Auros  | 44.02 μs | 0.226 μs | 0.189 μs |  1.00 |         - |
+
+### Day 6
+
+| Method |     Mean |   Error |  StdDev | Ratio | Allocated |
+|--------|---------:|--------:|--------:|------:|----------:|
+| Auros  | 123.7 μs | 2.06 μs | 1.93 μs |  1.00 |         - |
